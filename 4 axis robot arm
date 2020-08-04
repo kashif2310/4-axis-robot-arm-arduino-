@@ -1,0 +1,168 @@
+//This is arduino based 4 axis robot arm mechanically limited to move only in positive y axis and cannot reach negative y axis. However it is capable of reaching both negative and positive values of x and z axis. 
+
+#include<Servo.h>   //include servo motor library
+int servopin1 =10;  //define variable as servopin and attach to pin 10 
+int servopin2 =9;   //define variable as servopin and attach to pin 9
+int servopin3 =8;   //define variable as servopin and attach to pin 8
+int servopin4 =7;   //define variable as servopin and attach to pin 7
+     Servo servo1;    //define servo motor1
+     Servo servo2;    //define servo motor2
+     Servo servo3;    //define servo motor3
+     Servo servo4;    //define servo motor4
+void setup() {
+  Serial.begin(9600);
+    servo1.attach(servopin1);      //attach servo1 to pin10
+    servo2.attach(servopin2);      //attach servo2 to pin9
+    servo3.attach(servopin3);      //attach servo3 to pin8
+    servo4.attach(servopin4);      //attach servo4 to pin7
+
+}
+
+void loop() {
+    Serial.println("enter value of x coordinate");    //ask user to input value of x coordinate
+    while(Serial.available()==0){}                    //wait for user to input value
+    float x = Serial.parseFloat();                    //assign value of input value to x coordinate
+    Serial.print("value of x is ");                   //print value of x coordinate
+    Serial.println(x);
+              float g = Serial.parseFloat();          //g is assigned value of 0 which serial monitor returns
+              
+    
+    Serial.println("enter a positive value of y coordinate");    //ask user to input value of y coordinate
+    while(Serial.available()==0){}                               //wait for user to input value
+    float y = Serial.parseFloat();                               //assign value of input value to y coordinate
+    Serial.print("value of y is ");                              //print value of y coordinate
+    Serial.println(y);
+               float h = Serial.parseFloat();         //h is assigned value of 0 which serial monitor returns
+               
+    
+    Serial.println("enter value of z coordinate");    //ask user to input value of z coordinate
+    while(Serial.available()==0){}                    //wait for user to input value
+    float z = Serial.parseFloat();                    //assign value of input value to z coordinate
+    Serial.print("value of z is ");                   //print value of z coordinate
+    Serial.println(z);
+               float j = Serial.parseFloat();         //j is assigned value of 0 which serial monitor returns
+               
+  
+    float p =pow(x,2);                               //square of x coordinate
+    float q =pow(y,2);                               //square of y coordinate
+    float r =pow(z,2);                               //square of z coordinate
+    float l = p+q+r;                                 // adding 
+    float rl = pow(l,0.5);                           //rl is shortest distance of coordinate point from origin(square root of l)
+  
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   //code logic start
+   
+    if(z>=0){
+      if(x>=0)                                        
+      {
+               
+              float a = atan(z/x);     //a is angle to be moved by servo1
+              float b =0;              // b is angle to be moved by servo2 =0
+              float c1 = asin(y/rl);   //calculation
+              float c2 = acos(rl/10);  //calculation
+              float c = c1+c2;         //c is angle to be moved by servo3
+              float d1 = asin(rl/10);   //calculation
+              float d = 2*d1;           //d is angle to be moved by servo4
+
+                    servo1.write(57.3*a);      //move servo to final angle
+                    servo2.write(57.3*b);      //move servo to final angle
+                    servo3.write(57.3*c);      //move servo to final angle
+                    servo4.write(57.3*d);      //move servo to final angle
+
+Serial.print("angle servo1 = ");            //print value of angle moved by servo1
+Serial.println(57.3*a);
+Serial.print("angle servo2 = ");            //print value of angle moved by servo2
+Serial.println(57.3*b); 
+Serial.print("angle servo3 = ");            //print value of angle moved by servo3
+Serial.println(57.3*c);
+Serial.print("angle servo4 = ");            //print value of angle moved by servo4
+Serial.println(57.3*d);
+
+              
+       }
+       if(x<0){
+             float a1 = atan(z/x);      //calculation 
+             a1 = fabs(a1);             //calculation
+             float a = 3.1415925-a1;         //a = final value of angle moved by servo1
+             float b =0;                //here servo2 does not need to move
+             float c1 = asin(y/rl);     //calculation
+             float c2 = acos(rl/10);    //calculation
+             float c = c1+c2;           //b is angle to be moved by servo3
+             float d1 = asin(rl/10);    //calculation
+             float d = 2*d1;            //d is angle to be moved by servo4
+
+                    servo1.write(57.3*a);         //move servo to final angle
+                    servo2.write(57.3*b);         //move servo to final angle
+                    servo3.write(57.3*c);         //move servo to final angle
+                    servo4.write(57.3*d);         //move servo to final angle
+       
+Serial.print("angle servo1 = ");       //print value of angle moved by servo1
+Serial.println(57.3*a);  
+Serial.print("angle servo2 = ");       //print value of angle moved by servo2
+Serial.println(57.3*b);
+Serial.print("angle servo3 = ");       //print value of angle moved by servo3
+Serial.println(57.3*c);
+Serial.print("angle servo4 = ");       //print value of angle moved by servo4
+Serial.println(57.3*d);
+        
+        }
+  
+    }
+
+   if(z<0){
+       if(x>=0){
+        float a =0;               
+        float b = atan(z/x);
+        b = fabs(b);
+        float c1 = asin(y/rl);
+        float c2 = acos(rl/10);
+        float c = c1+c2;         
+        float d1 = asin(rl/10);
+        float d = 2*d1;  
+                   
+                    servo1.write(57.3*a);       //move servo to final angle
+                    servo2.write(57.3*b);       //move servo to final angle
+                    servo3.write(57.3*c);       //move servo to final angle
+                    servo4.write(57.3*d);       //move servo to final angle
+      
+Serial.print("angle servo1 = ");        //print value of angle moved by servo1
+Serial.println(57.3*a);
+Serial.print("angle servo2 = ");        //print value of angle moved by servo2
+Serial.println(57.3*b);
+Serial.print("angle servo3 = ");        //print value of angle moved by servo3
+Serial.println(57.3*c);
+Serial.print("angle servo4 = ");        //print value of angle moved by servo4
+Serial.println(57.3*d);
+        
+        
+        }
+    if(x<0){
+     
+      float a =0;
+      float b1 = atan(z/x);
+      float b = 3.1415925-b1;      //b= final value of angle to be moved by srevo2
+      float c1 = asin(y/rl);
+      float c2 = acos(rl/10);
+      float c = c1+c2;         //c is angle to be moved by servo3
+      float d1 = asin(rl/10);
+      float d = 2*d1;          //d is angle to be moved by servo4
+                    
+                    servo1.write(57.3*a);       //move servo to final angle
+                    servo2.write(57.3*b);       //move servo to final angle
+                    servo3.write(57.3*c);       //move servo to final angle
+                    servo4.write(57.3*d);       //move servo to final angle
+      
+Serial.print("angle servo1 = ");         //print value of angle moved by servo1
+Serial.println(57.3*a);
+Serial.print("angle servo2 = ");         //print value of angle moved by servo2
+Serial.println(57.3*b);
+Serial.print("angle servo3 = ");         //print value of angle moved by servo3
+Serial.println(57.3*c);
+Serial.print("angle servo4 = ");         //print value of angle moved by servo4
+Serial.println(57.3*d);      
+      
+      }
+    }
+    
+
+}
